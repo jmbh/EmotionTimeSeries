@@ -1,0 +1,159 @@
+Complete R Code
+--------------------------
+--------------------------
+
+##Required Packages
+library(qgraph)
+library(igraph)
+library(Matrix)
+
+## Rename
+colnames(data) <- c("start","finish","energetic","enthusiastic","content","irritable","restless","worried","guilty","afraid","anhedonia","angry","hopeless","down","positive","fatigue","tension","concentrate","accepted","threatened","ruminate","avoid_act","reassure","procrast","hours","difficult","unsatisfy","avoid_people")
+
+## Duplicate and lag time
+lagpad <- function(x, k) {
+     c(rep(NA, k), x)[1 : length(x)] 
+ }
+
+data$lag=lagpad(data$start,1)
+
+## Calculate time differences
+data$tdif=as.numeric(difftime(strptime(data$start,"%m/%d/%Y %H:%M"),strptime(data$lag,"%m/%d/%Y %H:%M")))
+
+## Replace NA
+data$tdif[is.na(data$tdif)]<- 0
+
+## Calculate cumulative sum of numeric elapsed time
+data$cumsumT=cumsum(data$tdif)
+
+##Subset data
+trim=data[,c(3:18,21:24,28)]
+dedat=data.frame(matrix(ncol = dim(trim)[2], nrow = dim(trim[1])))
+colnames(dedat)<-colnames(trim)
+
+##Detrend
+dedat[,1]=resid(lm(scale(trim[,1])~data$cumsumT,na.action=na.exclude))
+dedat[,2]=resid(lm(scale(trim[,2])~data$cumsumT,na.action=na.exclude))
+dedat[,3]=resid(lm(scale(trim[,3])~data$cumsumT,na.action=na.exclude))
+dedat[,4]=resid(lm(scale(trim[,4])~data$cumsumT,na.action=na.exclude))
+dedat[,5]=resid(lm(scale(trim[,5])~data$cumsumT,na.action=na.exclude))
+dedat[,6]=resid(lm(scale(trim[,6])~data$cumsumT,na.action=na.exclude))
+dedat[,7]=resid(lm(scale(trim[,7])~data$cumsumT,na.action=na.exclude))
+dedat[,8]=resid(lm(scale(trim[,8])~data$cumsumT,na.action=na.exclude))
+dedat[,9]=resid(lm(scale(trim[,9])~data$cumsumT,na.action=na.exclude))
+dedat[,10]=resid(lm(scale(trim[,10])~data$cumsumT,na.action=na.exclude))
+dedat[,11]=resid(lm(scale(trim[,11])~data$cumsumT,na.action=na.exclude))
+dedat[,12]=resid(lm(scale(trim[,12])~data$cumsumT,na.action=na.exclude))
+dedat[,13]=resid(lm(scale(trim[,13])~data$cumsumT,na.action=na.exclude))
+dedat[,14]=resid(lm(scale(trim[,14])~data$cumsumT,na.action=na.exclude))
+dedat[,15]=resid(lm(scale(trim[,15])~data$cumsumT,na.action=na.exclude))
+dedat[,16]=resid(lm(scale(trim[,16])~data$cumsumT,na.action=na.exclude))
+dedat[,17]=resid(lm(scale(trim[,17])~data$cumsumT,na.action=na.exclude))
+dedat[,18]=resid(lm(scale(trim[,18])~data$cumsumT,na.action=na.exclude))
+dedat[,19]=resid(lm(scale(trim[,19])~data$cumsumT,na.action=na.exclude))
+dedat[,20]=resid(lm(scale(trim[,20])~data$cumsumT,na.action=na.exclude))
+dedat[,21]=resid(lm(scale(trim[,21])~data$cumsumT,na.action=na.exclude))
+
+##Apply cubic spline interpolation to resample to even sampling
+datcub=data.frame(matrix(ncol=21,nrow=nrow(data)))
+datcub[,1]=(spline(x=data$cumsumT, y=dedat[,1],nrow(data),method='fmm'))$y
+datcub[,2]=(spline(x=data$cumsumT, y=dedat[,2],nrow(data),method='fmm'))$y
+datcub[,3]=(spline(x=data$cumsumT, y=dedat[,3],nrow(data),method='fmm'))$y
+datcub[,4]=(spline(x=data$cumsumT, y=dedat[,4],nrow(data),method='fmm'))$y
+datcub[,5]=(spline(x=data$cumsumT, y=dedat[,5],nrow(data),method='fmm'))$y
+datcub[,6]=(spline(x=data$cumsumT, y=dedat[,6],nrow(data),method='fmm'))$y
+datcub[,7]=(spline(x=data$cumsumT, y=dedat[,7],nrow(data),method='fmm'))$y
+datcub[,8]=(spline(x=data$cumsumT, y=dedat[,8],nrow(data),method='fmm'))$y
+datcub[,9]=(spline(x=data$cumsumT, y=dedat[,9],nrow(data),method='fmm'))$y
+datcub[,10]=(spline(x=data$cumsumT, y=dedat[,10],nrow(data),method='fmm'))$y
+datcub[,11]=(spline(x=data$cumsumT, y=dedat[,11],nrow(data),method='fmm'))$y
+datcub[,12]=(spline(x=data$cumsumT, y=dedat[,12],nrow(data),method='fmm'))$y
+datcub[,13]=(spline(x=data$cumsumT, y=dedat[,13],nrow(data),method='fmm'))$y
+datcub[,14]=(spline(x=data$cumsumT, y=dedat[,14],nrow(data),method='fmm'))$y
+datcub[,15]=(spline(x=data$cumsumT, y=dedat[,15],nrow(data),method='fmm'))$y
+datcub[,16]=(spline(x=data$cumsumT, y=dedat[,16],nrow(data),method='fmm'))$y
+datcub[,17]=(spline(x=data$cumsumT, y=dedat[,17],nrow(data),method='fmm'))$y
+datcub[,18]=(spline(x=data$cumsumT, y=dedat[,18],nrow(data),method='fmm'))$y
+datcub[,19]=(spline(x=data$cumsumT, y=dedat[,19],nrow(data),method='fmm'))$y
+datcub[,20]=(spline(x=data$cumsumT, y=dedat[,20],nrow(data),method='fmm'))$y
+datcub[,21]=(spline(x=data$cumsumT, y=dedat[,21],nrow(data),method='fmm'))$y
+
+##Lag function
+lagpad <- function(x, k) {
+     c(rep(NA, k), x)[1 : length(x)] 
+ }
+
+##Array of lagged values
+lag=datcub
+lag[,22]=lagpad(lag[,1])
+lag[,23]=lagpad(lag[,2])
+lag[,24]=lagpad(lag[,3])
+lag[,25]=lagpad(lag[,4])
+lag[,26]=lagpad(lag[,5])
+lag[,27]=lagpad(lag[,6])
+lag[,28]=lagpad(lag[,7])
+lag[,29]=lagpad(lag[,8])
+lag[,30]=lagpad(lag[,9])
+lag[,31]=lagpad(lag[,10])
+lag[,32]=lagpad(lag[,11])
+lag[,33]=lagpad(lag[,12])
+lag[,34]=lagpad(lag[,13])
+lag[,35]=lagpad(lag[,14])
+lag[,36]=lagpad(lag[,15])
+lag[,37]=lagpad(lag[,16])
+lag[,38]=lagpad(lag[,17])
+lag[,39]=lagpad(lag[,18])
+lag[,40]=lagpad(lag[,19])
+lag[,41]=lagpad(lag[,20])
+lag[,42]=lagpad(lag[,21])
+
+names=scan("names.txt",what = "character", sep = "\n")
+colnames(lag)<-names
+lag=lag[-1,]
+
+#Export data for idiographic SEM
+write.table(lag[,c(22:42,1:21)],'lag.txt',row.names=F,col.names=F)
+
+#Return number of observations for analysis
+nrow(lag)
+
+#Separate code has been provided for conducting idiographic SEM models in LISREL
+#LISREL output is then deconstructued into standardized output for
+#(a) Psi matrix [1:21,1:21]
+#(b) Psi matrix [22:42,22:42]
+#(c) Beta matrix [2:42,1:21]
+#These provide input matrices for
+#(a) Lag-0 correlations at time t
+#(b) Residual correlations at time t+1
+#(c) Lagged regression structure
+
+#Read in lagged regression structure
+beta_input = read.csv("beta.csv", sep=",", row.names=1)
+beta=as.matrix(beta_input)
+
+#Transpose for temporal model
+betamatrix=t(beta)
+
+#Read in/prep lag-0 correlations (t) and residual correlations (t+1)
+t_input = read.csv("t.csv", sep=",", row.names=1)
+tmat=as.matrix(t_input)
+tmatrix=as.matrix(forceSymmetric(t(tmat)))
+
+t1_input = read.csv("t1.csv", sep=",", row.names=1)
+t1mat=as.matrix(t1_input)
+t1matrix=as.matrix(forceSymmetric(t(t1mat)))
+
+#Read in node labels
+names.new<-scan("names_new.txt",what = "character", sep = "\n")
+
+#Generate graphs
+lag0=qgraph(tmatrix,layout='spring',graph='glasso',sampleSize=nrow(lag),cut=0.1,maximum=1,minimum=0,esize=25,vsize=6.5,labels=names.new,color=c("darkorange"),label.cex=.75,label.scale=F,aspect=T,legend=F,tuning=0)
+residual=qgraph(t1matrix,layout='spring',graph='glasso',sampleSize=nrow(lag),cut=0.1,maximum=1,minimum=0,esize=25,vsize=6.5,labels=names.new,color=c("steelblue1"), label.cex=.75,label.scale=F,aspect=T,legend=F,tuning=0)
+temporal=qgraph(betamatrix,layout='spring', cut=0.1,maximum=1,minimum=0,esize=15,vsize=6.5, labels=names.new, label.cex=.75, label.scale=F, aspect=T, legend=F)
+
+
+
+
+
+
+
