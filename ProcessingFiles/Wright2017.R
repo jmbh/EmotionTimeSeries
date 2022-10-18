@@ -1,14 +1,14 @@
-# jonashaslbeck@gmail.com; May 5, 2022
+# jonashaslbeck@gmail.com; Oct 18, 2022
 
 # ------------------------------------------------------------------
 # ------------- Load data ------------------------------------------
 # ------------------------------------------------------------------
 
 # Fisher Reanalysis
-data <- read.table("DataFromAuthors/Wendt2020/data/iads_sample3_ild.csv", 
+data <- read.table("DataFromAuthors/Wright2017/data/iads_sample3_ild.csv", 
                    header=TRUE, sep=";")
 
-datab <- read.table("DataFromAuthors/Wendt2020/data/ffm3.csv", 
+datab <- read.table("DataFromAuthors/Wright2017/data/ffm3.csv", 
                     header=TRUE, sep=";")
 
 
